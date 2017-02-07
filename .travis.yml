@@ -8,4 +8,12 @@ install:
 script:
   - npm run lint
   - npm test -- --coverage && codecov
-  # - npm run build
+deploy:
+  provider: npm
+  email: mail@theopak.com
+  on:
+    branch:
+      only: master
+    tags: true
+  api_key:
+    secure: VeEgOEeiHBROgfHFmHjK6sJJ0yqydM5EIXNq4gpuhWS6xrPOnR0iD3g4aejNCnlre7F5ld7FetnBAvvPs03lm+oR5Sl2YIRYIGAXPnBEl8zNSWK/uborf/JZ2Vrhn3Er8Evsq6+goZ9U3D8LmrjrjznAS1uY+/KXs9DBL6+064w=
