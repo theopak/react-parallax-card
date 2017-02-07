@@ -1,3 +1,5 @@
+![preview.gif](preview.gif)
+
 # react-parallax-card
 
 [![Build Status](https://travis-ci.org/theopak/react-parallax-card.svg?branch=master)](https://travis-ci.org/theopak/react-parallax-card)
@@ -6,7 +8,9 @@
 [![Dependency Status](https://david-dm.org/theopak/react-parallax-card/status.svg)](https://david-dm.org/theopak/react-parallax-card)
 [![devDependency Status](https://david-dm.org/theopak/react-parallax-card/dev-status.svg)](https://david-dm.org/theopak/react-parallax-card#info=devDependencies)
 
-https://theopak.github.io/react-parallax-card
+React component for a 3D card with parallax effects similar to Apple TV app icons. Demo: https://theopak.github.io/react-parallax-card
+
+Heavily inspired by https://github.com/drewwilson/atvImg
 
 ```js
 <ParallaxCard

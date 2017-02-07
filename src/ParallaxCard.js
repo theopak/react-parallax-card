@@ -50,7 +50,7 @@ class ParallaxCard extends Component {
     this._element.addEventListener('mouseleave', (e) => this.setState({ rotateX: 0, rotateY: 0, scale: 1, angle: 135, shineMidpointAlpha: 0 }))
   }
 
-  render() {
+  render () {
     const { style, className, children, enableRotate = true, label, hideLabel, ...rest } = this.props
 
     const containerStyle = {
@@ -69,7 +69,7 @@ class ParallaxCard extends Component {
     return (
       <div
         style={style}
-        ref={(ref) => this._element = ref}
+        ref={(ref) => { this._element = ref }}
         className={classNames('ParallaxCard', className)}
         {...rest}>
         <div className='ParallaxCard-container' style={containerStyle}>
@@ -87,6 +87,7 @@ class ParallaxCard extends Component {
 
 ParallaxCard.propTypes = {
   style: PropTypes.object,
+  className: PropTypes.string,
   label: PropTypes.string.isRequired,
   hideLabel: PropTypes.bool,
   enableRotate: PropTypes.bool,
