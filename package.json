@@ -9,11 +9,13 @@
     "type": "git",
     "url": "git+ssh://git@github.com/theopak/react-parallax-card.git"
   },
+  "bugs": {
+    "url": "https://github.com/theopak/react-parallax-card/issues"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "lint": "eslint **/*.js --ignore-pattern '/dist/*'",
     "test": "react-scripts test --env=jsdom",
-    "lint": "eslint **/*.js --ignore-pattern '/dist/*'"
     "build:docs": "react-scripts build",
     "eject": "react-scripts eject"
   },
