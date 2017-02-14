@@ -30,7 +30,7 @@ const Demo = (props) => {
     codeSample: {
       margin: 0,
       padding: 0
-    },
+    }
   }
 
   return (
@@ -43,12 +43,14 @@ const Demo = (props) => {
       <h1><a style={styles.heading} href='https://github.com/theopak/react-parallax-card'>react-parallax-card</a></h1>
       <pre style={styles.codeSampleWrapper}>
         <code style={styles.codeSample} className='language-jsx'>
+          {/* eslint-disable react/jsx-indent */}
 {`<ParallaxCard
   label='Label (optional)'
   enableRotate
   style={{ margin: '0 auto', width: 240, height: 240 }}>
   <img src='frank.jpeg' width='240' />
 </ParallaxCard>`}
+          {/* eslint-enable react/jsx-indent */}
         </code>
       </pre>
     </div>
