@@ -54,11 +54,13 @@ class ParallaxCard extends Component {
     const { style, className, children, enableRotate = true, label, hideLabel, ...rest } = this.props
 
     const containerStyle = {
+      willChange: 'transform',
       transform: `rotateX(${enableRotate && this.state.rotateX}deg)
                   rotateY(${enableRotate && this.state.rotateY}deg)
                   scale3d(${this.state.scale}, ${this.state.scale}, ${this.state.scale})`
     }
     const shineStyle = {
+      willChange: 'background',
       backgroundImage: enableRotate
         ? `linear-gradient(${this.state.angle}deg,
                            rgba(255, 255, 255, ${this.state.shineMidpointAlpha}) 0%,
