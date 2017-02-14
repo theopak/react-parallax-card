@@ -88,7 +88,7 @@ class ParallaxCard extends Component {
 ParallaxCard.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   hideLabel: PropTypes.bool,
   enableRotate: PropTypes.bool,
   children: PropTypes.node.isRequired
