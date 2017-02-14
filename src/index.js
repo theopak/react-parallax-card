@@ -6,6 +6,3 @@ ReactDOM.render(
   <Demo />,
   document.getElementById('root')
 )
-
-import ParallaxCard from './ParallaxCard'
-export default ParallaxCard
