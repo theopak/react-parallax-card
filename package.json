@@ -22,7 +22,7 @@
     "lint": "eslint **/*.js --ignore-pattern '**/dist'",
     "test": "react-scripts test --env=jsdom",
     "prebuild": "nwb check-config",
-    "build": "nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/."
+    "build": "nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/. && mv ./demo/dist/* ./docs/."
   },
   "eslintConfig": {
     "env": {
