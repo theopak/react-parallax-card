@@ -1,7 +1,7 @@
 {
   "name": "react-parallax-card",
   "description": "React component for a 3D card with parallax effects similar to Apple TV app icons.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Theo Pak <theopak@gmail.com (https://github.com/theopak)",
   "license": "Apache-2.0",
   "homepage": "https://theopak.github.io/react-parallax-card/",
@@ -12,24 +12,17 @@
   "bugs": {
     "url": "https://github.com/theopak/react-parallax-card/issues"
   },
+  "main": "dist/lib/index.js",
+  "module": "dist/es/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "start": "react-scripts start",
-    "lint": "eslint **/*.js --ignore-pattern '/dist/*'",
+    "start": "nwb serve-react-demo",
+    "lint": "eslint **/*.js --ignore-pattern '**/dist'",
     "test": "react-scripts test --env=jsdom",
-    "build:lib": "babel ./src/ParallaxCard.js --source-maps --out-dir ./dist/lib",
-    "build:docs": "react-scripts build",
-    "eject": "react-scripts eject"
-  },
-  "babel": {
-    "presets": [
-      "react",
-      "es2015"
-    ],
-    "plugins": [
-      "transform-decorators-legacy",
-      "transform-class-properties",
-      "transform-object-rest-spread"
-    ]
+    "prebuild": "nwb check-config",
+    "build": "nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/."
   },
   "eslintConfig": {
     "env": {
@@ -55,7 +48,16 @@
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testPathIgnorePatterns": [
+      "demo",
+      "dist",
+      "docs",
+      "node_modules"
+    ],
+    "testRegex": [
+      "\\.test\\.js$"
+    ]
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -73,9 +75,10 @@
     "eslint": "^3.15.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-config-standard-react": "^4.2.0",
-    "eslint-plugin-promise": "^3.4.1",
-    "eslint-plugin-react": "^6.9.0",
+    "eslint-plugin-promise": "3.4.2",
+    "eslint-plugin-react": "6.10.0",
     "eslint-plugin-standard": "^2.0.1",
+    "nwb": "^0.15.6",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "^0.9.0"
   }

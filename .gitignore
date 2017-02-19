@@ -2,11 +2,15 @@
 
 # dependencies
 node_modules
+npm-debug.log
 
-# testing
-coverage
+# nwb
+/coverage
+/demo/dist
+/dist/es
+/dist/lib
+/dist/umd
 
 # misc
 .DS_Store
 .env
-npm-debug.log

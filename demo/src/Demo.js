@@ -1,5 +1,5 @@
 import React from 'react'
-import ParallaxCard from './ParallaxCard'
+import ParallaxCard from '../../src/ParallaxCard'
 
 const Demo = (props) => {
   const styles = {

@@ -1,13 +1,18 @@
+sudo:
+  false
 language: node_js
 node_js:
   - '6.1'
+cache:
+  directories:
+    - node_modules
 install:
-  - npm cache clean
-  - npm install
   - npm install -g codecov
+  - npm install
 script:
   - npm run lint
   - npm test -- --coverage && codecov
+  - npm run prebuild
 deploy:
   provider: npm
   email: mail@theopak.com
