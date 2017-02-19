@@ -1,9 +1,0 @@
-node_modules
-npm-debug.log
-/coverage
-/demo
-.DS_Store
-.env
-.travis.yml
-nwb.config.js
-preview.gif

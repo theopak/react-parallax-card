@@ -1,7 +1,7 @@
 {
   "name": "react-parallax-card",
   "description": "React component for a 3D card with parallax effects similar to Apple TV app icons.",
-  "version": "0.3.3",
+  "version": "0.3.19",
   "author": "Theo Pak <theopak@gmail.com (https://github.com/theopak)",
   "license": "Apache-2.0",
   "homepage": "https://theopak.github.io/react-parallax-card/",
@@ -15,14 +15,18 @@
   "main": "dist/lib/index.js",
   "module": "dist/es/index.js",
   "files": [
-    "dist"
+    "dist/es/",
+    "dist/lib/",
+    "dist/umd/",
+    "LICENSE.txt",
+    "README.md"
   ],
   "scripts": {
     "start": "nwb serve-react-demo",
-    "lint": "eslint **/*.js --ignore-pattern '**/dist'",
+    "lint": "eslint **/*.js --ignore-pattern '**/dist' --ignore-pattern '/docs'",
     "test": "react-scripts test --env=jsdom",
     "prebuild": "nwb check-config",
-    "build": "nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/. && mv ./demo/dist/* ./docs/."
+    "build": "rm -rf ./docs/* && nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/. && mv ./demo/dist/* ./docs/."
   },
   "eslintConfig": {
     "env": {
@@ -51,7 +55,9 @@
     "collectCoverage": true,
     "testPathIgnorePatterns": [
       "demo",
-      "dist",
+      "es",
+      "lib",
+      "umd",
       "docs",
       "node_modules"
     ],

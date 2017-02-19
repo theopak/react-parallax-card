@@ -6,9 +6,7 @@ npm-debug.log
 
 # nwb
 /coverage
-/dist/es
-/dist/lib
-/dist/umd
+/dist
 
 # misc
 .DS_Store
