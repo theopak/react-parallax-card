@@ -6,7 +6,6 @@ npm-debug.log
 
 # nwb
 /coverage
-/demo/dist
 /dist/es
 /dist/lib
 /dist/umd
