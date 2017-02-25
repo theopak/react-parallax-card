@@ -28,6 +28,18 @@
     "prebuild": "nwb check-config",
     "build": "rm -rf ./docs/* && nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/. && mv ./demo/dist/* ./docs/."
   },
+  "babel": {
+    "presets": [
+      "react",
+      "es2015"
+    ],
+    "plugins": [
+      "styled-jsx/babel",
+      "transform-decorators-legacy",
+      "transform-class-properties",
+      "transform-object-rest-spread"
+    ]
+  },
   "eslintConfig": {
     "env": {
       "jest": true
@@ -66,9 +78,9 @@
     ]
   },
   "dependencies": {
-    "classnames": "^2.2.5",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "styled-jsx": "^0.5.7"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",

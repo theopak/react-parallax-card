@@ -9,6 +9,11 @@ module.exports = {
       }
     }
   },
+  babel: {
+    plugins: [
+      "styled-jsx/babel"
+    ]
+  },
   webpack: {
     html: {
       template: 'demo/src/index.html'

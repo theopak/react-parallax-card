@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import classNames from 'classnames'
-import './ParallaxCard.css'
 
 class ParallaxCard extends Component {
   constructor (props) {
@@ -72,8 +70,93 @@ class ParallaxCard extends Component {
       <div
         style={style}
         ref={(ref) => { this._element = ref }}
-        className={classNames('ParallaxCard', className)}
+        className={`ParallaxCard ${className}`}
         {...rest}>
+        <style jsx>{`
+          .ParallaxCard {
+            box-sizing: border-box;
+            margin: 0 0 2rem;
+            padding: 0;
+            border: none;
+            border-radius: 0.3125rem;
+            color: white;
+            font-size: 1rem;
+            line-height: 1rem;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            will-change: transform;
+          }
+
+          .ParallaxCard-container {
+            position: relative;
+            transform: rotate(0) scale3d(1, 1, 1);
+            transition: transform 500ms ease-out;
+          }
+
+          .ParallaxCard:hover .ParallaxCard-container {
+            transform: scale3d(1.07, 1.07, 1.07);
+            transition: transform 200ms ease-out;
+          }
+
+          .ParallaxCard-shadow {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            border-radius: 0.3125rem;
+            box-shadow: 0 0.5rem 2rem rgba(14, 21, 47, 0.6);
+            transition: box-shadow 200ms ease-out;
+          }
+
+          .ParallaxCard:hover .ParallaxCard-shadow {
+            box-shadow: 0 2.8125rem 6.25rem rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
+          }
+
+          .ParallaxCard-layers {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.3125rem;
+            overflow: hidden;
+            transform-style: preserve-3d;
+          }
+
+          .ParallaxCard-layers:before,
+          .ParallaxCard-layers:after   { content: " "; display: table; }
+          .ParallaxCard-layers:after   { clear: both; }
+          .ParallaxCard-layers         { *zoom: 1; }
+
+          .ParallaxCard-label {
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            height: 2rem;
+            line-height: 2rem;
+            font-size: 1rem;
+            color: #bfbfbf;
+            transition-delay: 0ms;
+          }
+
+          .ParallaxCard:hover .ParallaxCard-label {
+            font-weight: bold;
+            transform: translateY(10%);
+            transition-delay: 25ms;
+          }
+
+          .ParallaxCard-shine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.3125rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%,rgba(255, 255, 255, 0) 60%);
+            will-change: background;
+            pointer-events: none;
+          }
+       `}</style>
+
         <div className='ParallaxCard-container' style={containerStyle}>
           <div className='ParallaxCard-shadow' />
           <div className='ParallaxCard-layers'>
