@@ -25,6 +25,7 @@ const Demo = (props) => {
     codeSampleWrapper: {
       margin: 0,
       padding: '1rem',
+      minWidth: '90vw',
       background: '#efefef'
     },
     codeSample: {
@@ -37,8 +38,17 @@ const Demo = (props) => {
     <div style={styles.wrapper}>
       <ParallaxCard
         enableRotate
-        style={{ margin: '0 auto', width: 240, height: 240 }}>
-        <img src='https://s3-us-west-1.amazonaws.com/tachyonsio/img/Blonde-Frank_Ocean.jpeg' width='240' role='presentation' />
+        style={{ margin: '0 auto', width: '40vw' }}>
+
+        <img src={require('./nasa-80968.jpg')} role='presentation' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+        <div />
+        <div />
+        <div />
+        <img src={require('./spacewalks-153581_960_720.png')} role='presentation' style={{ display: 'block', width: 314, height: 360, margin: '-180px -157px', top: '67%', left: '75%' }} />
+        <p style={{ fontSize: '3rem', fontWeight: 'bold', padding: '3rem' }}>
+          Javascript!
+        </p>
+
       </ParallaxCard>
       <h1>
         <a style={styles.heading} href='https://github.com/theopak/react-parallax-card'>
@@ -55,8 +65,19 @@ const Demo = (props) => {
 <ParallaxCard
   label='Label (optional)'
   enableRotate
+  enableTransform
   style={{ margin: '0 auto', width: 240, height: 240 }}>
-  <img src='frank.jpeg' width='240' />
+
+  <img src='space.jpg' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+
+  <div /><div /><div />
+
+  <img src='astronaut.png' style={{ top: '67%', left: '75%' }} />
+
+  <p style={{ fontSize: '3rem', fontWeight: 'bold', padding: '3rem' }}>
+    Javascript!
+  </p>
+
 </ParallaxCard>`}
           {/* eslint-enable react/jsx-indent */}
         </code>

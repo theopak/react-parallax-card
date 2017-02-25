@@ -11,3 +11,8 @@ npm-debug.log
 # misc
 .DS_Store
 .env
+
+# wip
+*.bak
+/dist-old
+/docs-old
