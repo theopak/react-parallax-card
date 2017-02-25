@@ -1,14 +1,19 @@
 import React, { Component, PropTypes } from 'react'
+import throttle from 'lodash.throttle'
+import debounce from 'lodash.debounce'
 
 class ParallaxCard extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      width: -1,
-      height: -1,
+      width: 0,
+      height: 0,
+      boundingClientRect: { top: 0, left: 0 },
       scale: 1,
       rotateX: 0,
       rotateY: 0,
+      offsetX: 0,
+      offsetY: 0,
       angle: 135,
       shineMidpointAlpha: 0
     }
@@ -16,61 +21,97 @@ class ParallaxCard extends Component {
   }
 
   componentDidMount () {
-    // TODO: update these on resize
-    const width = this._element.clientWidth || this._element.offsetWidth || this._element.scrollWidth
-    const height = this._element.clientHeight || this._element.offsetHeight || this._element.scrollHeight
-    this.setState({ width, height })
-
-    // Rotate the card when the cursor interacts with it
-    // TODO: mobile
-    // TODO: debounce event handler
-    this._element.addEventListener('mousemove', (e) => {
-      e.preventDefault()
-      // algo shoutout https://github.com/drewwilson/atvImg/blob/master/atvImg.js
-      const { width, height } = this.state
-      const { scrollTop, scrollLeft } = document.body
-      const { top, left } = this._element.getBoundingClientRect()
-      const { pageX, pageY } = e
-      const offsetX = 0.52 - (pageX - left - scrollTop) / width
-      const offsetY = 0.52 - (pageY - top - scrollLeft) / height
-      const comX = (pageX - left - scrollLeft) - width / 2
-      const comY = (pageY - top - scrollTop) - height / 2
-      const rotateX = (comY - offsetY) * (0.10 * (320 / width))
-      const rotateY = (offsetX - comX) * (0.07 * (320 / width))
-      const scale = 1.07
-      const angle = Math.atan2(comY, comX) * (180 / Math.PI) - 90
-      const shineMidpointAlpha = (pageY - top - scrollTop) / height * 0.4
-      this.setState({ rotateX, rotateY, scale, angle, shineMidpointAlpha })
-      // console.log(angle)
+    // Helpers
+    const init = () => {
+      const width = this._element.clientWidth || this._element.offsetWidth || this._element.scrollWidth
+      const height = this._element.clientHeight || this._element.offsetHeight || this._element.scrollHeight
+      const boundingClientRect = this._element.getBoundingClientRect()
+      this.setState({ width, height, boundingClientRect })
+      console.log('resize handled')
+    }
+    const handleReset = () => {
+      this.setState({
+        rotateX: 0,
+        rotateY: 0,
+        offsetX: 0,
+        offsetY: 0,
+        scale: 1,
+        angle: 135,
+        shineMidpointAlpha: 0
+      })
+      console.log('reset handled')
+    }
+    const handleMovement = (e) => parallaxSetter({
+      e: {
+        pageX: (e.touches && Array.isArray(e.touches) && e.touches[0] && e.touches[0].pageX) || e.pageX,
+        pageY: (e.touches && Array.isArray(e.touches) && e.touches[0] && e.touches[0].pageY) || e.pageY
+      },
+      state: this.state,
+      setState: (nextState) => this.setState(nextState),
+      tiltMidpoint,
+      tiltX,
+      tiltY
     })
 
-    // Reset the card when the cursor leaves
-    this._element.addEventListener('mouseleave', (e) => this.setState({ rotateX: 0, rotateY: 0, scale: 1, angle: 135, shineMidpointAlpha: 0 }))
+    // Set things and update on resize
+    init()
+    window.addEventListener('resize', debounce(init, 150, { leading: false }), { passive: true })
+    window.addEventListener('resize', debounce(handleReset, 150, { leading: false }), { passive: true })
+
+    // Rotate the card when a pointer interacts with it
+    // TODO: mobile
+    // TODO: evaluate raf performance
+    const { parallaxSetter = defaultParallaxSetter, tiltMidpoint, tiltX, tiltY } = this.props
+    this._element.addEventListener('touchstart', throttle(handleMovement, 16))
+    this._element.addEventListener('mousemove', throttle(handleMovement, 16))
+
+    // Reset the card when a pointer leaves
+    this._element.addEventListener('touchend', debounce(handleReset, 16, { leading: false }, { passive: true }))
+    this._element.addEventListener('mouseleave', debounce(handleReset, 16, { leading: false }, { passive: true }))
   }
 
   render () {
-    const { style, className, children, enableRotate = true, label, hideLabel, ...rest } = this.props
+    const {
+      className = '',
+      layerContainerClassName = '',
+      children,
+      layers,
+      enableRotate = true,
+      enableTranslate = true,
+      distance,
+      parallaxFactor,
+      parallaxSetter,
+      tiltMidpoint,
+      tiltX,
+      tiltY,
+      label,
+      hideLabel,
+      ...rest
+    } = this.props
+    const childCount = children && (Object.keys(children) || []).length
 
     const containerStyle = {
-      willChange: 'transform',
       transform: `rotateX(${enableRotate && this.state.rotateX}deg)
                   rotateY(${enableRotate && this.state.rotateY}deg)
                   scale3d(${this.state.scale}, ${this.state.scale}, ${this.state.scale})`
     }
     const shineStyle = {
-      willChange: 'background',
       backgroundImage: enableRotate
         ? `linear-gradient(${this.state.angle}deg,
                            rgba(255, 255, 255, ${this.state.shineMidpointAlpha}) 0%,
-                           rgba(255,255,255,0) 80%)`
+                           rgba(255, 255, 255, 0) 80%)`
         : ''
     }
 
+    // Important to the parallax effect
+    const translateXBasis = parallaxFactor * this.state.offsetX * this.state.width / 320
+    const translateYBasis = parallaxFactor * this.state.offsetY  * this.state.height / 320
+
     return (
       <div
-        style={style}
         ref={(ref) => { this._element = ref }}
         className={`ParallaxCard ${className}`}
+        style={{ ...this.props.style, transform: `perspective(${distance})` }}
         {...rest}>
         <style jsx>{`
           .ParallaxCard {
@@ -159,30 +200,91 @@ class ParallaxCard extends Component {
 
         <div className='ParallaxCard-container' style={containerStyle}>
           <div className='ParallaxCard-shadow' />
-          <div className='ParallaxCard-layers'>
-            {children}
+          <div className={`ParallaxCard-layers ${layerContainerClassName}`}>
+            {childCount > 0 && Object.keys(children).map((key, i) => {
+              const style = {
+                position: i === 0 ? 'inherit' : 'absolute',
+                top: 0,
+                borderRadius: i === 0 ? 5 : 'inherit',
+                ...children[key].props.style,
+                willChange: 'transform',
+                transition: 'transform 100ms ease-out',
+                transform: `translateX(${enableTranslate && translateXBasis * (childCount - i)}px)
+                            translateY(${enableTranslate && translateYBasis * (childCount)}px)
+                            ${enableTranslate && i === 0 && 'scale(1.1)'}`
+              }
+
+              return React.cloneElement(children[key], { key: i, style })
+            })}
           </div>
           {enableRotate && <div className='ParallaxCard-shine' style={shineStyle} />}
         </div>
-        {label && !hideLabel && <div className='ParallaxCard-label'>{label}</div>}
+        {label && !hideLabel && <div
+          className='ParallaxCard-label'
+          style={{ transform: `perspective(${distance})` }}>
+          {label}
+        </div>}
       </div>
     )
   }
 }
 
 ParallaxCard.propTypes = {
-  style: PropTypes.object,
   className: PropTypes.string,
+  layerContainerClassName: PropTypes.string,
   label: PropTypes.string,
   hideLabel: PropTypes.bool,
   enableRotate: PropTypes.bool,
-  children: PropTypes.node.isRequired
+  enableTranslate: PropTypes.bool,
+  distance: PropTypes.string,
+  tiltMidpoint: PropTypes.number,
+  tiltX: PropTypes.number,
+  tiltY: PropTypes.number,
+  parallaxSetter: PropTypes.func,
+  parallaxFactor: PropTypes.number,
+  children: PropTypes.node
 }
 
 ParallaxCard.defaultProps = {
   hideLabel: false,
   children: {},
-  enableRotate: true
+  enableRotate: true,
+  enableTranslate: true,
+  distance: '60rem',
+  tiltMidpoint: 0.52,
+  tiltX: 0.1,
+  tiltY: 0.07,
+  parallaxFactor: 2.5
 }
 
 export default ParallaxCard
+
+export const defaultParallaxSetter = (props) => {
+  const {
+    e: { preventDefault, stopPropagation, pageX, pageY },
+    state: { width, height, boundingClientRect: { top, left } },
+    tiltMidpoint = 0.52,
+    tiltX = 0.1,
+    tiltY = 0.07,
+    setState
+  } = props || {}
+  const { scrollTop, scrollLeft } = document.body
+
+  // Other interactions
+  // preventDefault()
+  // stopPropagation()
+
+  // algo shoutout https://github.com/drewwilson/atvImg/blob/master/atvImg.js
+  const offsetX = tiltMidpoint - (pageX - left - scrollLeft) / width
+  const offsetY = tiltMidpoint - (pageY - top - scrollTop) / height
+  const comX = (pageX - left - scrollLeft) - width / 2.0
+  const comY = (pageY - top - scrollTop) - height / 2.0
+  const rotateX = (comY - offsetY) * tiltX * 320 / width
+  const rotateY = (offsetX - comX) * tiltY * 320 / width
+  const scale = 1.07
+  const angle = (Math.atan2(comY, comX) * 180 / Math.PI) - 90
+  const shineMidpointAlpha = (pageY - top - scrollTop) / height * 0.4
+  const computedProps = { rotateX, rotateY, offsetX, offsetY, scale, angle, shineMidpointAlpha }
+  // console.log(computedProps)
+  setState(computedProps)
+}

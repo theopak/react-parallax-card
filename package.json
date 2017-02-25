@@ -1,7 +1,7 @@
 {
   "name": "react-parallax-card",
   "description": "React component for a 3D card with parallax effects similar to Apple TV app icons.",
-  "version": "0.3.19",
+  "version": "0.5.7",
   "author": "Theo Pak <theopak@gmail.com (https://github.com/theopak)",
   "license": "Apache-2.0",
   "homepage": "https://theopak.github.io/react-parallax-card/",
@@ -25,8 +25,9 @@
     "start": "nwb serve-react-demo",
     "lint": "eslint **/*.js --ignore-pattern '**/dist' --ignore-pattern '/docs'",
     "test": "react-scripts test --env=jsdom",
+    "clean": "rm -rf ./dist/es ./dist/lib ./dist/umd ./docs/*",
     "prebuild": "nwb check-config",
-    "build": "rm -rf ./docs/* && nwb build-react-component && rm -rf ./dist/es ./dist/lib ./dist/umd && mv es lib umd ./dist/. && mv ./demo/dist/* ./docs/."
+    "build": "nwb build-react-component && npm run clean && mv es lib umd ./dist && mv ./demo/dist/* ./docs"
   },
   "babel": {
     "presets": [
@@ -78,6 +79,8 @@
     ]
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "styled-jsx": "^0.5.7"
