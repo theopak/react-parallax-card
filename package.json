@@ -2,7 +2,7 @@
   "name": "react-parallax-card",
   "description": "React component for a 3D card with parallax effects similar to Apple TV app icons.",
   "version": "0.5.7",
-  "author": "Theo Pak <theopak@gmail.com (https://github.com/theopak)",
+  "author": "Theo Pak <theopak@gmail.com> (https://github.com/theopak)",
   "license": "Apache-2.0",
   "homepage": "https://theopak.github.io/react-parallax-card/",
   "repository": {
