@@ -1,118 +1,172 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, Fragment } from 'react'
+import PropTypes from 'prop-types'
 import throttle from 'lodash.throttle'
 import debounce from 'lodash.debounce'
+import getParallaxState from './getParallaxState'
 
-class ParallaxCard extends Component {
-  constructor (props) {
-    super(props)
+export default class ParallaxCard extends Component {
+  constructor() {
+    super()
     this.state = {
-      width: 0,
+      angle: 135,
       height: 0,
-      boundingClientRect: { top: 0, left: 0 },
+      left: 0,
+      offsetX: 0,
+      offsetY: 0,
+      rotateX: 0,
+      rotateY: 0,
       scale: 1,
+      shineMidpointAlpha: 0,
+      top: 0,
+      width: 0,
+    }
+    this._ref = undefined
+
+    this.handleInit = debounce(this._handleInit.bind(this), 150, {
+      leading: false,
+    })
+    this.handleInteraction = throttle(this._handleInteraction.bind(this), 16)
+    this.handleReset = debounce(this._handleReset.bind(this), 16, {
+      leading: false,
+    })
+    this.renderChild = this.renderChild.bind(this)
+  }
+
+  componentDidMount() {
+    this.handleInit()
+
+    if (window) {
+      // Set things and update on resize
+      window.addEventListener('resize', this.handleInit, { passive: true })
+      window.addEventListener('resize', this.handleReset, { passive: true })
+    }
+
+    if (this._ref) {
+      // Rotate the card when a pointer interacts with it
+      // TODO: mobile
+      // TODO: evaluate raf performance
+      this._ref.addEventListener('touchstart', this.handleInteraction)
+      this._ref.addEventListener('mousemove', this.handleInteraction)
+
+      // Reset the card when a pointer leaves
+      this._ref.addEventListener('touchend', this.handleReset)
+      this._ref.addEventListener('mouseleave', this.handleReset)
+    }
+  }
+
+  componentWillUnmount() {
+    if (window) {
+      window.removeEventListener('resize', this.handleInit)
+      window.removeEventListener('resize', this.handleReset)
+    }
+
+    if (this._ref) {
+      this._ref.removeEventListener('touchstart', this.handleInteraction)
+      this._ref.removeEventListener('mousemove', this.handleInteraction)
+    }
+  }
+
+  getFirstState(element) {
+    const {
+      clientHeight,
+      clientWidth,
+      offsetHeight,
+      offsetWidth,
+      scrollHeight,
+      scrollWidth,
+    } = element
+    const { left, top } = element.getBoundingClientRect()
+
+    return {
+      left,
+      top,
+      height: clientHeight || offsetHeight || scrollHeight,
+      width: clientWidth || offsetWidth || scrollWidth,
+    }
+  }
+
+  getZeroState() {
+    return {
       rotateX: 0,
       rotateY: 0,
       offsetX: 0,
       offsetY: 0,
+      scale: 1,
       angle: 135,
-      shineMidpointAlpha: 0
+      shineMidpointAlpha: 0,
     }
-    this._element = undefined // ref
   }
 
-  componentDidMount () {
-    // Helpers
-    const init = () => {
-      const width = this._element.clientWidth || this._element.offsetWidth || this._element.scrollWidth
-      const height = this._element.clientHeight || this._element.offsetHeight || this._element.scrollHeight
-      const boundingClientRect = this._element.getBoundingClientRect()
-      this.setState({ width, height, boundingClientRect })
-      console.log('resize handled')
-    }
-    const handleReset = () => {
-      this.setState({
-        rotateX: 0,
-        rotateY: 0,
-        offsetX: 0,
-        offsetY: 0,
-        scale: 1,
-        angle: 135,
-        shineMidpointAlpha: 0
-      })
-      console.log('reset handled')
-    }
-    const handleMovement = (e) => parallaxSetter({
-      e: {
-        pageX: (e.touches && Array.isArray(e.touches) && e.touches[0] && e.touches[0].pageX) || e.pageX,
-        pageY: (e.touches && Array.isArray(e.touches) && e.touches[0] && e.touches[0].pageY) || e.pageY
-      },
-      state: this.state,
-      setState: (nextState) => this.setState(nextState),
-      tiltMidpoint,
-      tiltX,
-      tiltY
-    })
-
-    // Set things and update on resize
-    init()
-    window.addEventListener('resize', debounce(init, 150, { leading: false }), { passive: true })
-    window.addEventListener('resize', debounce(handleReset, 150, { leading: false }), { passive: true })
-
-    // Rotate the card when a pointer interacts with it
-    // TODO: mobile
-    // TODO: evaluate raf performance
-    const { parallaxSetter = defaultParallaxSetter, tiltMidpoint, tiltX, tiltY } = this.props
-    this._element.addEventListener('touchstart', throttle(handleMovement, 16))
-    this._element.addEventListener('mousemove', throttle(handleMovement, 16))
-
-    // Reset the card when a pointer leaves
-    this._element.addEventListener('touchend', debounce(handleReset, 16, { leading: false }, { passive: true }))
-    this._element.addEventListener('mouseleave', debounce(handleReset, 16, { leading: false }, { passive: true }))
+  _handleInit() {
+    this.setState(this.getFirstState(this._ref))
   }
 
-  render () {
+  _handleInteraction(evt) {
+    this.setState(getParallaxState(document.body, evt))
+  }
+
+  _handleReset() {
+    this.setState(this.getZeroState())
+  }
+
+  renderChild(child, index) {
+    const { children, isTranslateEnabled, parallaxFactor } = this.props
+    const { offsetX, offsetY, width, height } = this.state
+
+    const childCount = React.Children.count(children)
+    const translateXBasis = parallaxFactor * offsetX * width / 320
+    const translateYBasis = parallaxFactor * offsetY * height / 320
+    const translateX = translateXBasis * (childCount - index)
+    const translateY = translateYBasis * childCount
+    const style = {
+      position: index === 0 ? 'inherit' : 'absolute',
+      top: 0,
+      ...child.props.style,
+      borderRadius: index === 0 ? 5 : 'inherit',
+      willChange: 'transform',
+      transition: 'transform 100ms ease-out',
+      transform: `translateX(${isTranslateEnabled ? translateX : 0}px)
+                  translateY(${isTranslateEnabled ? translateY : 0}px)
+                  ${isTranslateEnabled && index === 0 ? 'scale(1.1)' : ''}`,
+    }
+
+    return React.cloneElement(child, { key: index, style })
+  }
+
+  render() {
     const {
-      className = '',
-      layerContainerClassName = '',
       children,
-      layers,
-      enableRotate = true,
-      enableTranslate = true,
+      className,
       distance,
-      parallaxFactor,
-      parallaxSetter,
-      tiltMidpoint,
-      tiltX,
-      tiltY,
+      isRotateEnabled,
       label,
-      hideLabel,
-      ...rest
+      layerContainerClassName,
+      style,
     } = this.props
-    const childCount = children && (Object.keys(children) || []).length
+    const { angle, rotateX, rotateY, scale, shineMidpointAlpha } = this.state
 
     const containerStyle = {
-      transform: `rotateX(${enableRotate && this.state.rotateX}deg)
-                  rotateY(${enableRotate && this.state.rotateY}deg)
-                  scale3d(${this.state.scale}, ${this.state.scale}, ${this.state.scale})`
+      ...style,
+      transform: `rotateX(${isRotateEnabled ? rotateX : 0}deg)
+                  rotateY(${isRotateEnabled ? rotateY : 0}deg)
+                  scale3d(${scale}, ${scale}, ${scale})`,
     }
     const shineStyle = {
-      backgroundImage: enableRotate
-        ? `linear-gradient(${this.state.angle}deg,
-                           rgba(255, 255, 255, ${this.state.shineMidpointAlpha}) 0%,
+      backgroundImage: isRotateEnabled
+        ? `linear-gradient(${angle}deg,
+                           rgba(255, 255, 255, ${shineMidpointAlpha}) 0%,
                            rgba(255, 255, 255, 0) 80%)`
-        : ''
+        : '',
     }
-
-    // Important to the parallax effect
-    const translateXBasis = parallaxFactor * this.state.offsetX * this.state.width / 320
-    const translateYBasis = parallaxFactor * this.state.offsetY  * this.state.height / 320
 
     return (
       <div
-        ref={(ref) => { this._element = ref }}
+        ref={ref => {
+          this._ref = ref
+        }}
         className={`ParallaxCard ${className}`}
-        style={{ ...this.props.style, transform: `perspective(${distance})` }}
-        {...rest}>
+        style={containerStyle}
+      >
         <style jsx>{`
           .ParallaxCard {
             box-sizing: border-box;
@@ -126,6 +180,7 @@ class ParallaxCard extends Component {
             cursor: pointer;
             transform-style: preserve-3d;
             will-change: transform;
+            transform: perspective(${distance});
           }
 
           .ParallaxCard-container {
@@ -151,7 +206,8 @@ class ParallaxCard extends Component {
           }
 
           .ParallaxCard:hover .ParallaxCard-shadow {
-            box-shadow: 0 2.8125rem 6.25rem rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
+            box-shadow: 0 2.8125rem 6.25rem rgba(14, 21, 47, 0.4),
+              0 16px 40px rgba(14, 21, 47, 0.4);
           }
 
           .ParallaxCard-layers {
@@ -161,12 +217,18 @@ class ParallaxCard extends Component {
             border-radius: 0.3125rem;
             overflow: hidden;
             transform-style: preserve-3d;
+            *zoom: 1;
           }
 
           .ParallaxCard-layers:before,
-          .ParallaxCard-layers:after   { content: " "; display: table; }
-          .ParallaxCard-layers:after   { clear: both; }
-          .ParallaxCard-layers         { *zoom: 1; }
+          .ParallaxCard-layers:after {
+            content: ' ';
+            display: table;
+          }
+
+          .ParallaxCard-layers:after {
+            clear: both;
+          }
 
           .ParallaxCard-label {
             position: absolute;
@@ -177,6 +239,7 @@ class ParallaxCard extends Component {
             font-size: 1rem;
             color: #bfbfbf;
             transition-delay: 0ms;
+            transform: perspective(${distance});
           }
 
           .ParallaxCard:hover .ParallaxCard-label {
@@ -192,99 +255,54 @@ class ParallaxCard extends Component {
             width: 100%;
             height: 100%;
             border-radius: 0.3125rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%,rgba(255, 255, 255, 0) 60%);
+            background: linear-gradient(
+              135deg,
+              rgba(255, 255, 255, 0.25) 0%,
+              rgba(255, 255, 255, 0) 60%
+            );
             will-change: background;
             pointer-events: none;
           }
-       `}</style>
+        `}</style>
 
-        <div className='ParallaxCard-container' style={containerStyle}>
-          <div className='ParallaxCard-shadow' />
+        <div className="ParallaxCard-container">
+          <div className="ParallaxCard-shadow" />
           <div className={`ParallaxCard-layers ${layerContainerClassName}`}>
-            {childCount > 0 && Object.keys(children).map((key, i) => {
-              const style = {
-                position: i === 0 ? 'inherit' : 'absolute',
-                top: 0,
-                borderRadius: i === 0 ? 5 : 'inherit',
-                ...children[key].props.style,
-                willChange: 'transform',
-                transition: 'transform 100ms ease-out',
-                transform: `translateX(${enableTranslate && translateXBasis * (childCount - i)}px)
-                            translateY(${enableTranslate && translateYBasis * (childCount)}px)
-                            ${enableTranslate && i === 0 && 'scale(1.1)'}`
-              }
-
-              return React.cloneElement(children[key], { key: i, style })
-            })}
+            {React.Children.map(children, this.renderChild)}
           </div>
-          {enableRotate && <div className='ParallaxCard-shine' style={shineStyle} />}
+          {isRotateEnabled && (
+            <div className="ParallaxCard-shine" style={shineStyle} />
+          )}
         </div>
-        {label && !hideLabel && <div
-          className='ParallaxCard-label'
-          style={{ transform: `perspective(${distance})` }}>
-          {label}
-        </div>}
+        {label && <div className="ParallaxCard-label">{label}</div>}
       </div>
     )
   }
 }
 
 ParallaxCard.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
-  layerContainerClassName: PropTypes.string,
-  label: PropTypes.string,
-  hideLabel: PropTypes.bool,
-  enableRotate: PropTypes.bool,
-  enableTranslate: PropTypes.bool,
   distance: PropTypes.string,
+  isRotateEnabled: PropTypes.bool,
+  isTranslateEnabled: PropTypes.bool,
+  label: PropTypes.string,
+  layerContainerClassName: PropTypes.string,
+  parallaxFactor: PropTypes.number,
+  style: PropTypes.object,
   tiltMidpoint: PropTypes.number,
   tiltX: PropTypes.number,
   tiltY: PropTypes.number,
-  parallaxSetter: PropTypes.func,
-  parallaxFactor: PropTypes.number,
-  children: PropTypes.node
 }
 
 ParallaxCard.defaultProps = {
-  hideLabel: false,
-  children: {},
-  enableRotate: true,
-  enableTranslate: true,
   distance: '60rem',
+  isRotateEnabled: true,
+  isTranslateEnabled: true,
+  className: '',
+  layerContainerClassName: '',
+  parallaxFactor: 2.5,
   tiltMidpoint: 0.52,
   tiltX: 0.1,
   tiltY: 0.07,
-  parallaxFactor: 2.5
-}
-
-export default ParallaxCard
-
-export const defaultParallaxSetter = (props) => {
-  const {
-    e: { preventDefault, stopPropagation, pageX, pageY },
-    state: { width, height, boundingClientRect: { top, left } },
-    tiltMidpoint = 0.52,
-    tiltX = 0.1,
-    tiltY = 0.07,
-    setState
-  } = props || {}
-  const { scrollTop, scrollLeft } = document.body
-
-  // Other interactions
-  // preventDefault()
-  // stopPropagation()
-
-  // algo shoutout https://github.com/drewwilson/atvImg/blob/master/atvImg.js
-  const offsetX = tiltMidpoint - (pageX - left - scrollLeft) / width
-  const offsetY = tiltMidpoint - (pageY - top - scrollTop) / height
-  const comX = (pageX - left - scrollLeft) - width / 2.0
-  const comY = (pageY - top - scrollTop) - height / 2.0
-  const rotateX = (comY - offsetY) * tiltX * 320 / width
-  const rotateY = (offsetX - comX) * tiltY * 320 / width
-  const scale = 1.07
-  const angle = (Math.atan2(comY, comX) * 180 / Math.PI) - 90
-  const shineMidpointAlpha = (pageY - top - scrollTop) / height * 0.4
-  const computedProps = { rotateX, rotateY, offsetX, offsetY, scale, angle, shineMidpointAlpha }
-  // console.log(computedProps)
-  setState(computedProps)
 }
