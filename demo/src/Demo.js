@@ -25,8 +25,9 @@ const Demo = (props) => {
     codeSampleWrapper: {
       margin: 0,
       padding: '1rem',
-      minWidth: '90vw',
       background: '#efefef'
+      width: '90vw',
+      overflow: 'scroll',
     },
     codeSample: {
       margin: 0,
