@@ -1,10 +1,11 @@
 /*
  * algo shoutout https://github.com/drewwilson/atvImg/blob/master/atvImg.js
  */
-export function getParallaxState(body, event, prevState, props) {
+export const getParallaxState = (body, event, prevState, props) => {
   const { scrollLeft, scrollTop } = body
-  const isTouches =
+  const isTouches = Boolean(
     event.touches && Array.isArray(event.touches) && event.touches[0]
+  )
   const pageX = isTouches ? event.touches[0].pageX : event.pageX
   const pageY = isTouches ? event.touches[0].pageY : event.pageY
 

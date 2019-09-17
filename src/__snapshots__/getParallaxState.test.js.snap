@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getParallaxState functionality getParallaxState({"scrollLeft": 0, "scrollTop": 0}, {"pageX": 8, "pageY": 9, "touches": [Array]}, {"height": 100, "left": 0, "top": 0, "width": 100}, {"tiltMidpoint": 0.5, "tiltX": 0.1, "tiltY": 0.1}) 1`] = `
+Object {
+  "angle": -225.59065721464668,
+  "offsetX": 0.49,
+  "offsetY": 0.48,
+  "rotateX": -15.513599999999999,
+  "rotateY": 15.836800000000004,
+  "scale": 1.07,
+  "shineMidpointAlpha": 0.008,
+}
+`;
+
+exports[`getParallaxState functionality getParallaxState({"scrollLeft": 0, "scrollTop": 0}, {"pageX": 21, "pageY": 22}, {"height": 100, "left": 0, "top": 0, "width": 100}, {"tiltMidpoint": 0.5, "tiltX": 0.1, "tiltY": 0.1}) 1`] = `
+Object {
+  "angle": -226.00508600525419,
+  "offsetX": 0.29000000000000004,
+  "offsetY": 0.28,
+  "rotateX": -9.0496,
+  "rotateY": 9.372800000000002,
+  "scale": 1.07,
+  "shineMidpointAlpha": 0.08800000000000001,
+}
+`;
+
+exports[`getParallaxState functionality getParallaxState({"scrollLeft": 0, "scrollTop": 0}, {"touches": [Array]}, {"height": 100, "left": 0, "top": 0, "width": 100}, {"tiltMidpoint": 0.5, "tiltX": 0.1, "tiltY": 0.1}) 1`] = `
+Object {
+  "angle": -226.00508600525419,
+  "offsetX": 0.29000000000000004,
+  "offsetY": 0.28,
+  "rotateX": -9.0496,
+  "rotateY": 9.372800000000002,
+  "scale": 1.07,
+  "shineMidpointAlpha": 0.08800000000000001,
+}
+`;
+
+exports[`getParallaxState functionality getParallaxState({"scrollLeft": 10, "scrollTop": 20}, {"pageX": 21, "pageY": 22}, {"height": 100, "left": 0, "top": 0, "width": 100}, {"tiltMidpoint": 0.5, "tiltX": 0.1, "tiltY": 0.1}) 1`] = `
+Object {
+  "angle": -219.0938588862295,
+  "offsetX": 0.39,
+  "offsetY": 0.48,
+  "rotateX": -15.513599999999999,
+  "rotateY": 12.604800000000001,
+  "scale": 1.07,
+  "shineMidpointAlpha": 0.008,
+}
+`;
+
+exports[`getParallaxState functionality getParallaxState({"scrollLeft": 10, "scrollTop": 20}, {"pageX": 30, "pageY": 40}, {"height": 250, "left": 18, "top": 19, "width": 250}, {"tiltMidpoint": 0.45, "tiltX": 0.101, "tiltY": 0.202}) 1`] = `
+Object {
+  "angle": -224.7680345487018,
+  "offsetX": 0.442,
+  "offsetY": 0.446,
+  "rotateX": -16.08837888,
+  "rotateY": 31.91716352,
+  "scale": 1.07,
+  "shineMidpointAlpha": 0.0016,
+}
+`;
