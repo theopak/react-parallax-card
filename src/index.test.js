@@ -1,7 +1,7 @@
-import ParallaxCard from './'
+import ParallaxCard from './index'
 
 describe('module', () => {
   it('is the default export', () => {
-    expect(ParallaxCard).toBeDefined()
+    expect(typeof ParallaxCard).toEqual('function')
   })
 })

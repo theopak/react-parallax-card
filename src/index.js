@@ -1,1 +1,2 @@
-export { default as ParallaxCard } from './ParallaxCard'
+import ParallaxCard from './ParallaxCard'
+export default ParallaxCard
