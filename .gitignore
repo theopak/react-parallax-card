@@ -16,3 +16,5 @@ npm-debug.log
 *.bak
 /dist-old
 /docs-old
+
+/pkg
