@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import throttle from 'lodash.throttle'
+import React, { Component } from 'react'
 import debounce from 'lodash.debounce'
 import getParallaxState from './getParallaxState'
+import throttle from 'lodash.throttle'
 
 export default class ParallaxCard extends Component {
   constructor() {
