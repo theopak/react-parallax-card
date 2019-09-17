@@ -110,6 +110,7 @@ export default class ParallaxCard extends Component {
   }
 
   renderChild(child, index) {
+    const { props: { style: childPropsStyle = {} } = {} } = child
     const { children, isTranslateEnabled, parallaxFactor } = this.props
     const { offsetX, offsetY, width, height } = this.state
 
@@ -121,7 +122,7 @@ export default class ParallaxCard extends Component {
     const style = {
       position: index === 0 ? 'inherit' : 'absolute',
       top: 0,
-      ...child.props.style,
+      ...childPropsStyle,
       borderRadius: index === 0 ? 5 : 'inherit',
       willChange: 'transform',
       transition: 'transform 100ms ease-out',
