@@ -3656,7 +3656,7 @@ commander@2.19.0, commander@~2.19.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
-commander@^2.11.0, commander@^2.19.0, commander@^2.20.0, commander@~2.20.0:
+commander@^2.11.0, commander@^2.19.0, commander@^2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
@@ -6122,13 +6122,14 @@ handle-thing@^2.0.0:
   integrity sha512-d4sze1JNC454Wdo2fkuyzCr6aHcbL6PGGuFAz0Li/NcOm1tCHGnWDRmJP85dh9IhQErTc2svWFEX5xHIOo//kQ==
 
 handlebars@^4.1.2:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.2.0.tgz#57ce8d2175b9bbb3d8b3cf3e4217b1aec8ddcb2e"
-  integrity sha512-Kb4xn5Qh1cxAKvQnzNWZ512DhABzyFNmsaJf3OAkWNa4NkaqWcNI8Tao8Tasi0/F4JD9oyG0YxuFyvyR57d+Gw==
+  version "4.7.6"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.6.tgz#d4c05c1baf90e9945f77aa68a7a219aa4a7df74e"
+  integrity sha512-1f2BACcBfiwAfStCKZNrUCgqNZkGsAT7UM3kkYtXuLo0KnaVfjKOyf7PRzB6++aK9STyT1Pd2ZCPe3EGOXleXA==
   dependencies:
+    minimist "^1.2.5"
     neo-async "^2.6.0"
-    optimist "^0.6.1"
     source-map "^0.6.1"
+    wordwrap "^1.0.0"
   optionalDependencies:
     uglify-js "^3.1.4"
 
@@ -8573,13 +8574,14 @@ minimist-options@^3.0.1:
     arrify "^1.0.1"
     is-plain-obj "^1.1.0"
 
-minimist@0.0.8, minimist@~0.0.1:
+minimist@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
 
-minimist@^1.1.1, minimist@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
+minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
+  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
 minipass@^2.2.1, minipass@^2.3.5:
   version "2.5.1"
@@ -9283,13 +9285,6 @@ opn@^5.1.0:
   integrity sha512-PqHpggC9bLV0VeWcdKhkpxY+3JTzetLSqTCWL/z/tFIbI6G8JCjondXklT1JinczLz2Xib62sSp0T/gKT4KksA==
   dependencies:
     is-wsl "^1.1.0"
-
-optimist@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
-  dependencies:
-    minimist "~0.0.1"
-    wordwrap "~0.0.2"
 
 optimize-css-assets-webpack-plugin@5.0.3:
   version "5.0.3"
@@ -12022,11 +12017,7 @@ source-map@0.7.3:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
-source-map@^0.5.0, source-map@^0.5.1, source-map@^0.5.3, source-map@^0.5.6:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
-
-source-map@^0.5.7:
+source-map@^0.5.0, source-map@^0.5.1, source-map@^0.5.3, source-map@^0.5.6, source-map@^0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
@@ -12949,12 +12940,9 @@ uglify-js@3.4.x:
     source-map "~0.6.1"
 
 uglify-js@^3.1.4:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.0.tgz#704681345c53a8b2079fb6cec294b05ead242ff5"
-  integrity sha512-W+jrUHJr3DXKhrsS7NUVxn3zqMOFn0hL/Ei6v0anCIMoKC93TjcflTagwIHLW7SfMFfiQuktQyFVCFHGUE0+yg==
-  dependencies:
-    commander "~2.20.0"
-    source-map "~0.6.1"
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.10.0.tgz#397a7e6e31ce820bfd1cb55b804ee140c587a9e7"
+  integrity sha512-Esj5HG5WAyrLIdYU74Z3JdG2PxdIusvj6IWHMtlyESxc7kcDz7zYlYjpnSokn1UbpV0d/QX9fan7gkCNd/9BQA==
 
 uid-number@~0.0.6:
   version "0.0.6"
@@ -13532,11 +13520,7 @@ widest-line@^2.0.0:
   dependencies:
     string-width "^2.1.1"
 
-wordwrap@~0.0.2:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
-
-wordwrap@~1.0.0:
+wordwrap@^1.0.0, wordwrap@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
 
