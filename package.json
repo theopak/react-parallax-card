@@ -123,7 +123,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-react": "^7.6.1",
+    "eslint-plugin-react": "^7.23.2",
     "jest-cli": "^24.9.0",
     "np": "^5.1.0",
     "pika-plugin-minify": "^0.1.0",
